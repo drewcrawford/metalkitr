@@ -1,8 +1,10 @@
+use foundationr::NSCopying;
 use objr::bindings::*;
 
 objc_instance_newtype! {
-    struct MTKTextureLoaderOption: NSString;
+    pub struct MTKTextureLoaderOption: NSString;
 }
+impl NSCopying for MTKTextureLoaderOption {}
 extern {
     pub static MTKTextureLoaderOptionAllocateMipmaps: &'static MTKTextureLoaderOption;
     pub static MTKTextureLoaderOptionGenerateMipmaps: &'static MTKTextureLoaderOption;

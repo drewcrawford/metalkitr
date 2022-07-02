@@ -8,3 +8,5 @@ edition = "2021"
 [dependencies]
 objr = {git = "https://github.com/drewcrawford/objr"}
 metalr = {git = "https://github.com/drewcrawford/metalr"}
+foundationr = {git = "https://github.com/drewcrawford/foundationr",features=["nsurl","nsdictionary"]}
+blocksr = {git = "https://github.com/drewcrawford/blocksr"}
