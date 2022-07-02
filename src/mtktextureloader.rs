@@ -27,6 +27,7 @@ impl MTKTextureLoader {
         match metalr::MTLDevice::default() {
             Some(device) => {
                 let loader = MTKTextureLoader::initWithDevice(&device, pool);
+
             }
             None => {
                 println!("Assuming CI");
