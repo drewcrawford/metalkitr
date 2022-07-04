@@ -26,15 +26,15 @@ impl MTKTextureLoader {
             Self::assume_nonnil(raw).assume_retained().assume_mut()
         }
     }
-    pub fn newTextureWithContentsOfURLOptionsCompletionHandler<C: FnOnce(Result<&MTLTexture,&NSError>) + Send + 'static>(&mut self, url: &NSURL, options: &foundationr::NSDictionary<MTKTextureLoaderOption,NSObject>,callback: C, pool: &ActiveAutoreleasePool) {
+    pub fn newTextureWithContentsOfURLOptionsCompletionHandler<C: FnOnce(Result<&mut MTLTexture,&mut NSError>) + Send + 'static>(&mut self, url: &NSURL, options: &foundationr::NSDictionary<MTKTextureLoaderOption,NSObject>,callback: C, pool: &ActiveAutoreleasePool) {
         unsafe {
             let mut block = MTKTextureLoaderCallback::new(|raw_texture,raw_error| {
                 if !raw_texture.is_null() {
-                    callback(Ok(&*raw_texture))
+                    callback(Ok(&mut *raw_texture))
                 }
                 else {
                     debug_assert!(!raw_error.is_null());
-                    callback(Err(&*raw_error))
+                    callback(Err(&mut *raw_error))
                 }
             });
             Self::perform_primitive(self, Sel::newTextureWithContentsOfURL_options_completionHandler(),pool,(url.assume_nonmut_perform(),options.assume_nonmut_perform(),&mut block))
