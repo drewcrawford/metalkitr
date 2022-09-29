@@ -12,6 +12,7 @@ objr::objc_selector_group! {
     trait Selectors {
         @selector("initWithDevice:")
         @selector("newTextureWithContentsOfURL:options:completionHandler:")
+        @selector("newTextureWithData:options:error:")
     }
     impl Selectors for Sel {}
 }
@@ -38,6 +39,15 @@ impl MTKTextureLoader {
                 }
             });
             Self::perform_primitive(self, Sel::newTextureWithContentsOfURL_options_completionHandler(),pool,(url.assume_nonmut_perform(),options.assume_nonmut_perform(),&mut block))
+        }
+    }
+    pub fn newTextureWithDataOptionsError<'p>(&mut self, data: &foundationr::NSData, options: &foundationr::NSDictionary<MTKTextureLoaderOption,NSObject>, pool: &'p ActiveAutoreleasePool) -> Result<StrongCell<metalr::MTLTexture>,AutoreleasedCell<'p, foundationr::NSError>> {
+        unsafe {
+            let mut error: *mut NSError = std::ptr::null_mut();
+            let texture = Self::perform_result(self, Sel::newTextureWithData_options_error(),pool,(data.assume_nonmut_perform(),options.assume_nonmut_perform(),&mut error));
+            texture.map(|texture|
+                //although this API is declared nullable, presumably this only occurs if there is no error
+                MTLTexture::assume_nonnil(texture).assume_retained())
         }
     }
 }
